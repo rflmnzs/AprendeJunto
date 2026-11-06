@@ -1,0 +1,9 @@
+target/
+*.class
+*.log
+.idea/
+.vscode/
+*.iml
+.env
+application-local.properties
+frontend/node_modules/

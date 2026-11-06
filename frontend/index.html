@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AprendeJunto: aprenda e ensine em sessões rápidas entre alunos.">
+    <title>AprendeJunto | Mural</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <a class="brand" href="index.html" aria-label="AprendeJunto - Mural">AprendeJunto</a>
+        <div class="header-actions">
+            <span class="balance" aria-label="Saldo atual">Saldo: 3 🪙</span>
+            <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Alternar tema" title="Alternar tema">◐</button>
+        </div>
+    </header>
+
+    <main class="page-shell">
+        <section class="hero" aria-labelledby="page-title">
+            <h1 id="page-title">Mural de dúvidas</h1>
+            <p>Peça ajuda para avançar nos estudos ou compartilhe o que você sabe com a comunidade.</p>
+        </section>
+
+        <div class="dashboard-grid">
+            <section class="card" aria-labelledby="new-question-title">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="new-question-title">Postar nova dúvida</h2>
+                        <p>Uma pergunta custa 1 moeda.</p>
+                    </div>
+                </div>
+
+                <form id="question-form" class="form-grid">
+                    <div class="field">
+                        <label for="question-title">Título</label>
+                        <input id="question-title" name="titulo" type="text" placeholder="Ex.: Como funciona recursão?" required>
+                    </div>
+                    <div class="field">
+                        <label for="question-subject">Matéria</label>
+                        <input id="question-subject" name="materia" type="text" placeholder="Ex.: Programação" required>
+                    </div>
+                    <div class="field">
+                        <label for="question-description">Descrição</label>
+                        <input id="question-description" name="descricao" type="text" placeholder="Explique brevemente sua dúvida" required>
+                    </div>
+                    <button class="primary-button" type="submit">Pedir ajuda (custa 1 🪙)</button>
+                </form>
+                <p id="form-status" class="status-message" role="status" aria-live="polite"></p>
+            </section>
+
+            <section class="card" aria-labelledby="feed-title">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="feed-title">Dúvidas abertas</h2>
+                        <p>Escolha uma pergunta e ajude outro aluno.</p>
+                    </div>
+                </div>
+                <div id="questions-list" class="questions-list" aria-live="polite">
+                    <p class="empty-state">Carregando dúvidas...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="app.js" defer></script>
+</body>
+</html>
