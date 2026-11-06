@@ -146,11 +146,21 @@ function initializeStudyRoom() {
 
     endButton.addEventListener("click", async () => {
         window.clearInterval(timer);
-        const sessionId = new URLSearchParams(window.location.search).get("idSessao");
+        const sessionId = new URLSearchParams(window.location.search).get("idSessao") || "1";
         if (sessionId) {
-            const stars = window.prompt("Avalie a sessão de 1 a 5 estrelas:", "5");
+            const stars = window.prompt("Quantas estrelas (1 a 5) dá para o seu colega?", "5");
             if (stars !== null) {
-                await fetch(`${API_BASE_URL}/api/sessoes/${sessionId}/encerrar?estrelas=${encodeURIComponent(stars)}`, { method: "POST" });
+                const rating = Number(stars);
+                if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+                    window.alert("Digite um número inteiro entre 1 e 5.");
+                    return;
+                }
+
+                const response = await fetch(`${API_BASE_URL}/api/sessoes/${sessionId}/encerrar?estrelas=${rating}`, { method: "POST" });
+                if (!response.ok) {
+                    window.alert("Não foi possível encerrar a sessão. Verifique se o backend está ativo.");
+                    return;
+                }
             }
         }
         window.location.href = "index.html";
