@@ -276,3 +276,35 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+.study-tabs { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; margin-bottom: 28px; }
+.study-tab { flex: 1; color: var(--aj-primary); background: transparent; }
+.study-tab[aria-selected="true"] { background: var(--aj-primary); color: var(--aj-surface); box-shadow: 0 6px 24px var(--aj-primary-glow); }
+[data-theme="dark"] .study-tab[aria-selected="true"] { color: var(--aj-bg); }
+.study-panel:not([hidden]) { animation: fadeUp .35s ease; }
+.notebook-list { display: grid; gap: 20px; }
+.notebook-card { display: flex; flex-direction: column; align-items: stretch; gap: 20px; padding: 24px; }
+.notebook-card > div { min-width: 0; }
+.notebook-card p { margin: 0; }
+.notebook-badge { display: inline-block; padding: 6px 12px; margin-bottom: 14px; border-radius: var(--aj-radius-btn); background: var(--aj-coin); color: var(--aj-text); font-size: .85rem; }
+[data-theme="dark"] .notebook-badge { color: var(--aj-bg); }
+.notebook-modal { width: min(640px, calc(100% - 40px)); text-align: left; }
+.notebook-modal h3 { margin-top: 24px; }
+.room-main { max-width: 1120px; }
+.study-room-grid { display: grid; gap: 24px; align-items: start; }
+.study-room-video, .transcript-panel { min-width: 0; }
+.transcript-panel { padding: 24px; }
+.transcript-help, .transcript-panel small { font-size: .8rem; }
+.transcript-log { height: 300px; overflow-y: auto; overflow-wrap: anywhere; padding: 12px; background: var(--aj-bg); border-radius: var(--aj-radius-card); border: 1px solid var(--aj-glass-border); }
+.transcript-message { padding: 12px; margin: 0 0 12px; border-radius: var(--aj-radius-card); background: var(--aj-surface); border-left: 3px solid var(--aj-sky); }
+.transcript-message strong { display: block; font-size: .8rem; color: var(--aj-primary); }
+.transcript-message p { margin: 4px 0 0; }
+.transcript-interim { min-height: 26px; font-style: italic; overflow-wrap: anywhere; margin-block: 10px; }
+.video-caption { right: 20px; }
+@media (min-width: 720px) {
+    .notebook-card { flex-direction: row; justify-content: space-between; align-items: center; }
+    .notebook-card button { flex: none; }
+}
+@media (min-width: 1000px) {
+    .study-room-grid { grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr); }
+}

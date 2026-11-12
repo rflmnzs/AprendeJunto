@@ -31,7 +31,11 @@
             <p>Todo mundo tem algo para aprender. E algo para ensinar.</p>
             <p class="how-it-works">Pedir ajuda custa 1 moeda. Ensinar rende 1 moeda — e uma avaliação de 5 estrelas dá mais 1 de bônus. Até 15 minutos, juntos.</p>
         </section>
-        <div class="dashboard-grid">
+        <div class="study-tabs glass-panel" role="tablist" aria-label="Escolha como estudar">
+            <button id="live-tab" class="study-tab" role="tab" aria-selected="true" aria-controls="live-panel" type="button">Mural Ao Vivo</button>
+            <button id="notebooks-tab" class="study-tab" role="tab" aria-selected="false" aria-controls="notebooks-panel" tabindex="-1" type="button">Cadernos de Estudo (IA)</button>
+        </div>
+        <div id="live-panel" class="dashboard-grid study-panel" role="tabpanel" aria-labelledby="live-tab">
             <section class="feed-section" aria-labelledby="feed-title">
                 <h2 id="feed-title">Mural de dúvidas</h2>
                 <p>Compartilhe o que você sabe. Um colega está esperando sua ajuda.</p>
@@ -76,7 +80,28 @@
                 <p id="form-status" class="status-message" role="status"></p>
             </section>
         </div>
+        <section id="notebooks-panel" class="study-panel" role="tabpanel" aria-labelledby="notebooks-tab" hidden>
+            <h2>Conhecimento que fica</h2>
+            <p>Revisite os conceitos e continue aprendendo no seu ritmo.</p>
+            <p class="bonus-note">Prévia do MVP: materiais e selos ilustrativos. A validação por IA e a integração RAG/NotebookLM ainda não estão conectadas.</p>
+            <div class="notebook-list">
+                <article class="card notebook-card">
+                    <div><span class="notebook-badge">Validado por IA 🤖 <small>· demonstração</small></span><h3>Física: Leis de Newton</h3><p>Autor: Marina · Material de exemplo</p></div>
+                    <button class="primary-button" data-notebook="newton" type="button">Estudar Material</button>
+                </article>
+                <article class="card notebook-card">
+                    <div><span class="notebook-badge">Validado por IA 🤖 <small>· demonstração</small></span><h3>Matemática: Equações do 2º grau</h3><p>Autor: Rafael · Material de exemplo</p></div>
+                    <button class="primary-button" data-notebook="equacoes" type="button">Estudar Material</button>
+                </article>
+            </div>
+        </section>
     </main>
+    <dialog id="notebook-modal" class="rating-modal glass-panel notebook-modal" aria-labelledby="notebook-title">
+        <h2 id="notebook-title"></h2>
+        <p>Material demonstrativo · revisão guiada</p>
+        <div id="notebook-content"></div>
+        <form method="dialog"><button class="secondary-button full-width">Voltar aos cadernos</button></form>
+    </dialog>
     <footer class="page-shell page-footer">AprendeJunto · Leapy<br>Conhecimento cresce quando a gente compartilha.</footer>
 </body>
 </html>
