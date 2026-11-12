@@ -3,66 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AprendeJunto: aprenda e ensine em sessões rápidas entre alunos.">
-    <title>AprendeJunto | Mural</title>
+    <meta name="description" content="Aprenda e ensine com outros alunos no AprendeJunto.">
+    <title>AprendeJunto | Mural de dúvidas</title>
     <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
 </head>
 <body>
-    <header class="app-header">
-        <a class="brand" href="index.html" aria-label="AprendeJunto - Mural">AprendeJunto</a>
+    <a class="skip-link" href="#mural">Pular para o mural</a>
+    <header class="app-header page-shell">
+        <a class="brand" href="index.html" aria-label="AprendeJunto — início">
+            <svg class="brand-mark" viewBox="0 0 100 80" aria-hidden="true">
+                <path class="logo-primary" d="M18 4H40Q54 4 54 18V42Q54 56 40 56H28L6 74 11 55Q2 53 2 40V18Q2 4 18 4Z"/>
+                <path class="logo-sky" d="M67 20H82Q98 20 98 36V52Q98 67 84 67L98 80 73 67H65Q51 67 51 53V36Q51 20 67 20Z"/>
+                <circle class="logo-action" cx="48" cy="39" r="14"/>
+            </svg>
+            <span>AprendeJunto<small>Uma iniciativa Leapy</small></span>
+        </a>
         <div class="header-actions">
-            <span class="balance" aria-label="Saldo atual">Saldo: 3 🪙</span>
-            <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Alternar tema" title="Alternar tema">◐</button>
+            <span class="balance" aria-label="Saldo ilustrativo: 3 moedas"><span class="coin" id="coin-balance">3</span><span>moedas<small>Saldo ilustrativo</small></span></span>
+            <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ativar tema escuro">🌙</button>
         </div>
     </header>
-
-    <main class="page-shell">
-        <section class="hero" aria-labelledby="page-title">
-            <h1 id="page-title">Mural de dúvidas</h1>
-            <p>Peça ajuda para avançar nos estudos ou compartilhe o que você sabe com a comunidade.</p>
+    <main class="page-shell" id="mural">
+        <section class="intro" aria-labelledby="page-title">
+            <p class="eyebrow">DE ALUNO PARA ALUNO</p>
+            <h1 id="page-title">Uma dúvida sua.<br>Uma descoberta nossa.</h1>
+            <p>Todo mundo tem algo para aprender. E algo para ensinar.</p>
+            <p class="how-it-works">Pedir ajuda custa 1 moeda. Ensinar rende 1 moeda. Até 15 minutos, juntos.</p>
         </section>
-
         <div class="dashboard-grid">
-            <section class="card" aria-labelledby="new-question-title">
-                <div class="section-heading">
-                    <div>
-                        <h2 id="new-question-title">Postar nova dúvida</h2>
-                        <p>Uma pergunta custa 1 moeda.</p>
-                    </div>
+            <section class="feed-section" aria-labelledby="feed-title">
+                <h2 id="feed-title">Mural de dúvidas</h2>
+                <p>Compartilhe o que você sabe. Um colega está esperando sua ajuda.</p>
+                <label class="search-box" for="question-search">
+                    <span>Buscar uma dúvida</span>
+                    <input id="question-search" type="search" placeholder="Ex.: Leis de Newton">
+                </label>
+                <div class="subject-tabs" role="group" aria-label="Filtrar por matéria">
+                    <button class="subject-tab active" data-subject="Todas" aria-pressed="true" type="button">Todas</button>
+                    <button class="subject-tab" data-subject="Matemática" aria-pressed="false" type="button">Matemática</button>
+                    <button class="subject-tab" data-subject="Física" aria-pressed="false" type="button">Física</button>
+                    <button class="subject-tab" data-subject="Química" aria-pressed="false" type="button">Química</button>
                 </div>
-
+                <p id="feed-status" class="status-message" role="status"></p>
+                <div id="questions-list" class="questions-list" aria-live="polite">
+                    <p class="empty-state">Buscando dúvidas para você…</p>
+                </div>
+                <button class="primary-button full-width ask-cta" id="focus-question" type="button">+ Pedir ajuda (-1 moeda)</button>
+            </section>
+            <section class="card ask-card" id="new-question" aria-labelledby="ask-title">
+                <span class="question-mark" aria-hidden="true">?</span>
+                <h2 id="ask-title">Onde você travou?</h2>
+                <p>Conta pra gente. Aprender fica mais fácil com companhia.</p>
                 <form id="question-form" class="form-grid">
                     <div class="field">
-                        <label for="question-title">Título</label>
-                        <input id="question-title" name="titulo" type="text" placeholder="Ex.: Como funciona recursão?" required>
+                        <label for="question-title">Título da dúvida</label>
+                        <input id="question-title" name="titulo" type="text" placeholder="Ex.: Leis de Newton" required>
                     </div>
                     <div class="field">
                         <label for="question-subject">Matéria</label>
-                        <input id="question-subject" name="materia" type="text" placeholder="Ex.: Programação" required>
+                        <select id="question-subject" name="materia" required>
+                            <option value="" disabled selected>Escolha uma matéria</option>
+                            <option>Matemática</option><option>Física</option><option>Química</option><option>Biologia</option><option>Português</option>
+                        </select>
                     </div>
                     <div class="field">
-                        <label for="question-description">Descrição</label>
-                        <input id="question-description" name="descricao" type="text" placeholder="Explique brevemente sua dúvida" required>
+                        <label for="question-description">Conte um pouco mais (opcional)</label>
+                        <textarea id="question-description" name="descricao" rows="4" placeholder="Qual parte você ainda não entendeu?"></textarea>
                     </div>
-                    <button class="primary-button" type="submit">Pedir ajuda (custa 1 🪙)</button>
+                    <button class="primary-button full-width" type="submit">Pedir ajuda (-1 moeda)</button>
                 </form>
-                <p id="form-status" class="status-message" role="status" aria-live="polite"></p>
-            </section>
-
-            <section class="card" aria-labelledby="feed-title">
-                <div class="section-heading">
-                    <div>
-                        <h2 id="feed-title">Dúvidas abertas</h2>
-                        <p>Escolha uma pergunta e ajude outro aluno.</p>
-                    </div>
-                </div>
-                <div id="questions-list" class="questions-list" aria-live="polite">
-                    <p class="empty-state">Carregando dúvidas...</p>
-                </div>
+                <p id="form-status" class="status-message" role="status"></p>
             </section>
         </div>
     </main>
-
-    <script src="app.js" defer></script>
+    <footer class="page-shell page-footer">AprendeJunto · Leapy<br>Conhecimento cresce quando a gente compartilha.</footer>
 </body>
 </html>
