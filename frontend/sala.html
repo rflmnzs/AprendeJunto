@@ -10,7 +10,7 @@
 </head>
 <body>
     <a class="skip-link" href="#study-room">Pular para a sala</a>
-    <header class="app-header page-shell">
+    <header class="app-header page-shell glass-panel">
         <a class="brand" href="index.html" aria-label="AprendeJunto — voltar ao mural">
             <svg class="brand-mark" viewBox="0 0 100 80" aria-hidden="true">
                 <path class="logo-primary" d="M18 4H40Q54 4 54 18V42Q54 56 40 56H28L6 74 11 55Q2 53 2 40V18Q2 4 18 4Z"/>
@@ -34,6 +34,7 @@
             </div>
         </section>
         <div class="video-placeholder" aria-label="Prévia da área de vídeo">
+            <span class="video-caption">CONEXÃO HUMANA · APRENDIZADO COLABORATIVO</span>
             <svg class="camera-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
                 <rect x="6" y="16" width="34" height="32" rx="10"/>
                 <path d="m40 26 17-9v30l-17-9Z"/>
@@ -42,12 +43,28 @@
             <p>A câmera aparecerá aqui.</p>
             <small>Prévia visual · chamada de vídeo ainda não conectada</small>
         </div>
-        <button id="end-session-button" class="danger-button full-width" type="button">Encerrar chamada</button>
+        <div class="room-actions">
+            <div class="tooltip-wrap">
+                <button id="ai-hint-button" class="ai-button" type="button" aria-controls="ai-hint-panel" aria-expanded="false" aria-describedby="ai-tooltip">💡 Pedir Dica à IA</button>
+                <span id="ai-tooltip" class="tooltip glass-panel" role="tooltip">Uma pista para pensar em dupla, não uma resposta pronta.</span>
+            </div>
+            <button id="end-session-button" class="danger-button full-width" type="button">Encerrar chamada</button>
+        </div>
+        <div id="ai-hint-panel" class="ai-panel glass-panel" role="region" aria-labelledby="ai-hint-title" hidden>
+            <div class="ai-panel-heading">
+                <h2 id="ai-hint-title">Dica da IA</h2>
+                <button id="close-ai-hint" class="secondary-button" type="button" aria-label="Fechar dica da IA">×</button>
+            </div>
+            <p id="ai-hint-text">Antes de escolher uma fórmula, identifiquem juntos o que o problema pede e quais dados vocês já têm. Qual seria o primeiro passo? Expliquem um para o outro!</p>
+            <small>Dica demonstrativa · a IA é copiloto, vocês conduzem o aprendizado.</small>
+        </div>
+        <p id="ai-hint-status" class="status-message" role="status"></p>
         <p class="room-tip">Escute com carinho. Explique do seu jeito. Aprendam juntos.</p>
     </main>
-    <dialog id="rating-modal" class="rating-modal" aria-labelledby="rating-title" aria-describedby="rating-description">
+    <dialog id="rating-modal" class="rating-modal glass-panel" aria-labelledby="rating-title" aria-describedby="rating-description rating-bonus">
         <h2 id="rating-title">Mandou bem!</h2>
         <p id="rating-description">Cada troca faz a diferença. Como foi aprender com seu colega?</p>
+        <p id="rating-bonus" class="bonus-note"><strong>Dê 5 estrelas para dar um bônus ao colega!</strong><br>O tutor ganha 1 moeda por ajudar e +1 moeda com 5 estrelas: 2 moedas no total. Avalie de acordo com sua experiência.</p>
         <form id="rating-form">
             <fieldset class="rating-fieldset">
                 <legend>Sua avaliação</legend>
@@ -59,6 +76,7 @@
                     <label><input type="radio" name="estrelas" value="5" aria-label="5 estrelas"><span aria-hidden="true">★</span></label>
                 </div>
             </fieldset>
+            <p id="rating-preview" class="rating-preview" role="status">Selecione as estrelas para ver a recompensa do tutor.</p>
             <p id="rating-status" class="status-message" role="status"></p>
             <button class="primary-button full-width" type="submit">Enviar avaliação</button>
         </form>

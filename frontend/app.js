@@ -12,10 +12,12 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeTheme();
     initializeMural();
     initializeStudyRoom();
+    initializeAiHint();
 });
 
 function initializeTheme() {
-    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    let savedTheme;
+    try { savedTheme = localStorage.getItem(THEME_STORAGE_KEY); } catch { /* Private browsing may block storage. */ }
     const preferredTheme = savedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     setTheme(preferredTheme);
     document.querySelectorAll("#theme-toggle").forEach((button) => button.addEventListener("click", () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark")));
@@ -23,7 +25,7 @@ function initializeTheme() {
 
 function setTheme(theme) {
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    try { localStorage.setItem(THEME_STORAGE_KEY, theme); } catch { /* Theme still works without persistence. */ }
     document.querySelectorAll("#theme-toggle").forEach((button) => { const dark = theme === "dark"; button.textContent = dark ? "☀️" : "🌙"; button.setAttribute("aria-label", dark ? "Ativar tema claro" : "Ativar tema escuro"); });
 }
 
@@ -39,9 +41,9 @@ function initializeMural() {
 }
 
 async function loadQuestions() {
-    try { const response = await fetch(`${API_BASE_URL}/api/duvidas/feed`); if (!response.ok) throw new Error("feed"); allQuestions = await response.json(); }
+    try { const response = await fetch(`${API_BASE_URL}/api/duvidas/feed`); if (!response.ok) throw new Error("feed"); allQuestions = await response.json(); document.querySelector("#feed-status").textContent = ""; }
     catch (error) { allQuestions = demoQuestions; document.querySelector("#feed-status").textContent = "Estamos sem conexão no momento. Estas dúvidas são exemplos para você conhecer o mural."; console.info("Backend indisponível; exibindo dúvidas de demonstração.", error); }
-    renderQuestions(allQuestions);
+    applyQuestionFilters();
 }
 
 function applyQuestionFilters() {
@@ -53,7 +55,7 @@ function applyQuestionFilters() {
 function renderQuestions(questions) {
     const list = document.querySelector("#questions-list");
     if (!questions.length) { list.innerHTML = "<p class=\"empty-state\">Nenhuma dúvida encontrada com esses filtros.</p>"; return; }
-    list.innerHTML = questions.map((question) => `<article class="question-item"><div><h3>${escapeHtml(question.titulo)}</h3><p class="question-description">${escapeHtml(question.descricao || "Compartilhe uma ideia e ajude este colega a avançar.")}</p><div class="question-meta"><span class="question-subject">${escapeHtml(question.materia)}</span><span class="question-author"><span class="mini-avatar">${escapeHtml(question.iniciais || "AJ")}</span>${escapeHtml(question.autor || "Aluno da comunidade")} · ${escapeHtml(question.tempo || "agora")}</span></div></div><button class="primary-button accept-button" type="button" data-question-id="${escapeHtml(question.id)}">Ajudar <span>→</span></button></article>`).join("");
+    list.innerHTML = questions.map((question) => `<article class="question-item"><div><span class="reward-badge">Recompensa: 1 a 2 🪙</span><h3>${escapeHtml(question.titulo)}</h3><p class="question-description">${escapeHtml(question.descricao || "Compartilhe uma ideia e ajude este colega a avançar.")}</p><div class="question-meta"><span class="question-subject">${escapeHtml(question.materia)}</span><span class="question-author"><span class="mini-avatar">${escapeHtml(question.iniciais || "AJ")}</span>${escapeHtml(question.autor || "Aluno da comunidade")} · ${escapeHtml(question.tempo || "agora")}</span></div></div><button class="primary-button accept-button" type="button" data-question-id="${escapeHtml(question.id)}">Ajudar <span>→</span></button></article>`).join("");
     list.querySelectorAll(".accept-button").forEach((button) => button.addEventListener("click", () => acceptQuestion(button.dataset.questionId)));
 }
 
@@ -90,6 +92,15 @@ function initializeStudyRoom() {
     }, 1000);
     endButton.addEventListener("click", openRating);
     document.querySelector("#close-rating").addEventListener("click", () => modal.close());
+    document.querySelector("#rating-form").addEventListener("change", (event) => {
+        const rating = Number(new FormData(event.currentTarget).get("estrelas"));
+        document.querySelector("#rating-preview").textContent = rating === 5
+            ? "Bônus de excelência! 1 moeda pela ajuda + 1 de bônus = 2 moedas para o tutor."
+            : "O tutor recebe 1 moeda pela ajuda. Obrigado por avaliar com carinho!";
+        event.currentTarget.querySelectorAll(".rating-stars label").forEach((label) => {
+            label.classList.toggle("is-selected", Number(label.querySelector("input").value) <= rating);
+        });
+    });
     document.querySelector("#rating-form").addEventListener("submit", async (event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -112,6 +123,31 @@ function initializeStudyRoom() {
         } finally {
             submit.disabled = false;
         }
+    });
+}
+
+// Local demonstration only: no AI request or student data leaves the browser.
+function initializeAiHint() {
+    const button = document.querySelector("#ai-hint-button");
+    const panel = document.querySelector("#ai-hint-panel");
+    const close = document.querySelector("#close-ai-hint");
+    const status = document.querySelector("#ai-hint-status");
+    if (!button || !panel || !close || !status) return;
+
+    button.addEventListener("click", () => {
+        panel.hidden = false;
+        button.setAttribute("aria-expanded", "true");
+        status.textContent = "Dica demonstrativa disponível: " + document.querySelector("#ai-hint-text").textContent;
+        panel.scrollIntoView({
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+            block: "nearest"
+        });
+    });
+    close.addEventListener("click", () => {
+        panel.hidden = true;
+        button.setAttribute("aria-expanded", "false");
+        status.textContent = "";
+        button.focus();
     });
 }
 

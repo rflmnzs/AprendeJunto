@@ -80,7 +80,8 @@ public class DuvidaService {
 
         Usuario tutor = sessao.getAlunoTutor();
         int saldoAtual = tutor.getSaldoMoedas() == null ? 0 : tutor.getSaldoMoedas();
-        tutor.setSaldoMoedas(saldoAtual + 1);
+        int recompensa = estrelas == 5 ? 2 : 1;
+        tutor.setSaldoMoedas(saldoAtual + recompensa);
         usuarioRepository.save(tutor);
 
         Duvida duvida = sessao.getDuvida();
